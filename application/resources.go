@@ -16,11 +16,15 @@ func LoadResources(cfg *config.Config) (*Resources, error) {
 		return nil, err
 	}
 	schema := `
-	CREATE TABLE IF NOT EXISTS books (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		title TEXT,
-		author TEXT
-	);`
+	CREATE TABLE users IF NOT EXISTS (
+    id INT PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    birth_date DATE NOT NULL,
+    session_token VARCHAR(255) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+);`
 	db.MustExec(schema)
 	return &Resources{
 		db: db,
