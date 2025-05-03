@@ -1,0 +1,50 @@
+package authentication
+
+import (
+	"encoding/xml"
+	"net/http"
+
+	"com.github/confusionhill/df/private/server/internal/config"
+	errorDto "com.github/confusionhill/df/private/server/internal/data/dto/error"
+	"com.github/confusionhill/df/private/server/internal/data/dto/ninja"
+	"github.com/labstack/echo/v4"
+)
+
+type Handler struct {
+	cfg *config.Config
+}
+
+func NewHandler(cfg *config.Config) (*Handler, error) {
+	return &Handler{
+		cfg: cfg,
+	}, nil
+}
+
+func (h *Handler) RegisterUserHandler(c echo.Context) error {
+	return nil
+}
+
+func (h *Handler) AuthenticateAccountHandler(c echo.Context) error {
+	var payload ninja.NinjaDTO
+	if err := xml.NewDecoder(c.Request().Body).Decode(&payload); err != nil {
+		return c.String(http.StatusBadRequest, "Invalid XML")
+	}
+
+	// Process payload.Content here...
+	response := ninja.NinjaDTO{
+		Content: "86369929901m8t2e9928861c7i1k9j1o9h2gae2p891f8l2s85288f1i9n278l1ga8365q1h8p2d902g9e248i148j2b8d36872f6m1l6a1l6t1f7j20792r7d349b298d249d1i882b9g27952t9l268r158a35981ta02i962797219t3174158o2o6m1s8n3465226r24ae32871ha42h791a9a2n8l259t317o1a961c7d1797218l1o9422aa2p6q1p7r32862m6g2479309m2k9b32a62b902f9n26962oac2r931t982s8n1l8i2n6h256t1s691i5q258k169a20ab2k88349c2ca0277q1b8s198i1h9925891h8e167o1f811m9r2j9p2n9g348g2o6615702b72276m1q7k148p238m196j1bab2kai32ac328m238o327322641g651a6g1k8c198f1c9d226r1eai2sae378g1a881j8a2i7r2q9c326l1c741g8e1s6j1n741l681m9m2d8m1n8n1g5p138i316t1d7c2j7b1r882p841h9a2l84167d347r26721i7b1s7g2m6k1b6s1c7b2h7t2f8b18962k65169023561d7827a22ha22b8a1h801l9f27a4359m26862b712j822c9m297234ap316q249k2h9g36a533ab2o601s9t316d1h95219m31931p9f2t9k1q891c9r2c8n2e7n30af2h7f14a638aj319p2m7n307q2n5g1b82318j1m8s1d902l691g961i902a9b2ba6316m2c9j2n9i2a8g239p2f86326n1q9j2o98238d155j1h8d1s9l269o339e2j8o1m912t8l18951j971h67268d178l146a289q298m1e8f1q6j2a8l197f19al2l661e941p7a149i1t9r2j5q1o8f1h9h259a2h881i9k2d8b2b9c237p2j671a8r318o1j9b1t982ta53060149c2p8p2b9j2c591i8o168e1d86148b1m70279q289j2t8s1jaf2k782s8l1na9327n1n8k376i1q9d1m992taj34991i811ga233a32l7p167n326n248i238k1a8j158r187r1d8a17aq2s891o9f249p2i5r1h921t8g1f8r2n8s199p2m8g357j346e176414621o6d1h872o84386k1e71265l1r882k8d356t156t1ha12e6913962b6c1j9f2r891a7r17a02i81229r2l9t2876285n1g6n1r741i611d852f66147c2t6i1m8631732f8a24a12ra42s7c149i2a64159h2q9e1q9k207f35a5329b2a7b1b6k1j8g2i8g23841a7128a02l9i2r8k157e2i8h1k8b1daf347f1f7q2p88139s2d7p1e9q2e63135n1j6i1p8b199s3598258k2s7f1g9e358t1l9523942m7h1p7s2r6g1s6r227l2p912d8e208s1f751580179h268m1h932ra02874166n2j7d228c306j1l77277l2j752s7r25812q721j6d1n8j247d1r6k1p8r38842k75266k1f7d255s1h791r7l2d7k276g1j741p8h326723601788158r1m901s8l187g16ae2q9a309s2q9i2pa3359a1o8i2d951hae2p9r388h1g8s1l8k2o9l239a297o1s5t1q8j1j921l8f248l1l9t2i81188t2285157e367o2l8e2m7015811n8g1ba02q7t159426a6338o1k8c1o951o8m2869187s21ae357h1b8q1b8m2c7a22701885376k1n82317p2d5s257423a42j9l208f1m93358p1e88219n288l1k9m35a6339s308j269f2s972a9l27932n8r356716851l9l2n8r1e7i138o1m7s376m319f21a72ran327f209b29aa2f912k971s7r225n1b83377j2s531c9c1s9f25a72g6s1o8t1ta9337m1b9o28981j83298d1p9c1r7919a02d761f83347o367s337i2j861la32m8r176j138m1l8o207r1p9r279q2g9131952haa2mad2s9f349e1r93385m1a762a7s376t38a22c8t1f9o2g6g1a9s2j96228r22a12f7a138a2o862s671g7g3769166m20aa2k9o2tai337m1i7l138j1la62h9f2c7l1q9m2s8c24a82s7l206516781ca537a62f8d1j9q2k9s2d8p1n601j6a1l8i249m1rab2r9n36922q9i2i951r751h87199s2f8b1m7h296q256n1m93179a21a7359m33782d8b2r6q1o862f7s2h941t8o1m8a1c8h248f2e7d1n8f33962s9s2n9k2g952b9a2c8b188t1p8t2ba32m9c2s8l2k", // your logic here
+	}
+
+	return c.XML(http.StatusOK, response)
+}
+
+func (h *Handler) RegisterAccountHandler(c echo.Context) error {
+	// strDOB := c.FormValue("strDOB")
+	// strUserName := c.FormValue("strUserName")
+	// strPassword := c.FormValue("strPassword")
+	// strEmail := c.FormValue("strEmail")
+	resp := errorDto.ErrorResponseDTO{
+		Code: errorDto.INVALID_EMAIL,
+	}
+	return c.String(http.StatusOK, resp.ToStringValues())
+}
