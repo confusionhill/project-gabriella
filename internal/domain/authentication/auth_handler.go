@@ -23,7 +23,7 @@ func NewHandler(cfg *config.Config, usecase *Usecase) (*Handler, error) {
 	}, nil
 }
 
-func (h *Handler) RegisterUserHandler(c echo.Context) error {
+func (h *Handler) RegisterAccountCharacterHandler(c echo.Context) error {
 	return nil
 }
 
