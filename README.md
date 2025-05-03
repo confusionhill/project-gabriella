@@ -1,5 +1,6 @@
 # Project Gabriella
 
+![DragonFable](https://www.artix.com/media/1261/thumb-md-dragonfable.jpg?width=1170px&height=658px&mode=crop)
 A private server for DragonFable written in Go.
 
 This project allows you to run a private server for DragonFable with customizable game and server file locations.
