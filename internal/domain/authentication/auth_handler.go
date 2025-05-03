@@ -7,16 +7,19 @@ import (
 	"com.github/confusionhill/df/private/server/internal/config"
 	errorDto "com.github/confusionhill/df/private/server/internal/data/dto/error"
 	"com.github/confusionhill/df/private/server/internal/data/dto/ninja"
+	"com.github/confusionhill/df/private/server/internal/data/entity/game"
 	"github.com/labstack/echo/v4"
 )
 
 type Handler struct {
-	cfg *config.Config
+	cfg     *config.Config
+	usecase *Usecase
 }
 
-func NewHandler(cfg *config.Config) (*Handler, error) {
+func NewHandler(cfg *config.Config, usecase *Usecase) (*Handler, error) {
 	return &Handler{
-		cfg: cfg,
+		cfg:     cfg,
+		usecase: usecase,
 	}, nil
 }
 
@@ -39,12 +42,34 @@ func (h *Handler) AuthenticateAccountHandler(c echo.Context) error {
 }
 
 func (h *Handler) RegisterAccountHandler(c echo.Context) error {
-	// strDOB := c.FormValue("strDOB")
-	// strUserName := c.FormValue("strUserName")
-	// strPassword := c.FormValue("strPassword")
-	// strEmail := c.FormValue("strEmail")
+	strDOB := c.FormValue("strDOB")
+	if strDOB == "" {
+		return c.String(http.StatusBadRequest, "Birthdate is required")
+	}
+	strUserName := c.FormValue("strUserName")
+	if strUserName == "" {
+		return c.String(http.StatusBadRequest, "Username is required")
+	}
+	strPassword := c.FormValue("strPassword")
+	if strPassword == "" {
+		return c.String(http.StatusBadRequest, "Password is required")
+	}
+	strEmail := c.FormValue("strEmail")
+	if strEmail == "" {
+		return c.String(http.StatusBadRequest, "Email is required")
+	}
+
 	resp := errorDto.ErrorResponseDTO{
 		Code: errorDto.INVALID_EMAIL,
+	}
+	err := h.usecase.RegisterUser(c.Request().Context(), &game.User{
+		Username:  strUserName,
+		Password:  strPassword,
+		Email:     strEmail,
+		BirthDate: strDOB,
+	})
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
 	}
 	return c.String(http.StatusOK, resp.ToStringValues())
 }

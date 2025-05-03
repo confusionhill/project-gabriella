@@ -12,7 +12,7 @@ type Handlers struct {
 }
 
 func LoadHandlers(cfg *config.Config, usecase *Usecases) (*Handlers, error) {
-	authHandler, err := authentication.NewHandler(cfg)
+	authHandler, err := authentication.NewHandler(cfg, usecase.authUsecase)
 	if err != nil {
 		return nil, err
 	}
