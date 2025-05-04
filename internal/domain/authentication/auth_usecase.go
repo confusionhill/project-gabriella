@@ -34,13 +34,17 @@ func (u *Usecase) generateRandomSessionToken() string {
 	return uuid.New().String()
 }
 
-func (u *Usecase) AuthenticateUserUsecase(ctx context.Context, username string, password string) (*game.User, error) {
-	user, err := u.repository.GetUserByUsername(ctx, username)
+func (u *Usecase) AuthenticateUserUsecase(ctx context.Context, username string, password string) ([]game.User, error) {
+	users, err := u.repository.GetUserByUsername(ctx, username)
 	if err != nil {
 		return nil, err
 	}
+	if len(users) == 0 {
+		return nil, errors.New("user not found")
+	}
+	user := users[0]
 	if user.Password != password {
 		return nil, errors.New("invalid password")
 	}
-	return user, nil
+	return users, nil
 }
