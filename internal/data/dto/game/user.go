@@ -9,6 +9,25 @@ import (
 	"com.github/confusionhill/df/private/server/internal/data/entity/game"
 )
 
+type CreateCharacterRequestDTO struct {
+	UserID        int64  `form:"intUserID"`
+	Username      string `form:"strUsername"`
+	Password      string `form:"strPassword"`
+	Token         string `form:"strToken"`
+	CharacterName string `form:"strCharacterName"`
+	Gender        string `form:"strGender"`
+	Pronoun       string `form:"strPronoun"`
+	HairID        int64  `form:"intHairID"`
+	ColorHair     int64  `form:"intColorHair"`
+	ColorSkin     int64  `form:"intColorSkin"`
+	ColorBase     int64  `form:"intColorBase"`
+	ColorTrim     int64  `form:"intColorTrim"`
+	ClassID       int64  `form:"intClassID"`
+	RaceID        int64  `form:"intRaceID"`
+	ClassName     string `form:"strClass"`
+	HairFrame     int64  `form:"intHairFrame"`
+}
+
 type AuthUserDTO struct {
 	XMLName xml.Name `xml:"characters"`
 	User    UserDTO  `xml:"user"`

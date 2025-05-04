@@ -26,6 +26,10 @@ func (u *Usecase) RegisterUserUsecase(ctx context.Context, user *game.User) erro
 	return u.repository.CreateUser(ctx, user)
 }
 
+func (u *Usecase) RegisterCharacterUsecase(ctx context.Context, character *game.Character) error {
+	return u.repository.CreateCharacter(ctx, character)
+}
+
 func (u *Usecase) generateRandomSessionToken() string {
 	return uuid.New().String()
 }

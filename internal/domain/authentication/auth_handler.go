@@ -26,7 +26,39 @@ func NewHandler(cfg *config.Config, usecase *Usecase) (*Handler, error) {
 }
 
 func (h *Handler) RegisterAccountCharacterHandler(c echo.Context) error {
-	return nil
+	var form gameDto.CreateCharacterRequestDTO
+	if err := c.Bind(&form); err != nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{
+			"error": "Invalid form data",
+		})
+	}
+	if err := h.usecase.RegisterCharacterUsecase(c.Request().Context(), &game.Character{
+		UserID:       form.UserID,
+		Name:         form.CharacterName,
+		Level:        1,
+		Experience:   0,
+		Strength:     1,
+		Dexterity:    1,
+		Intelligence: 1,
+		Luck:         1,
+		Charisma:     1,
+		Endurance:    1,
+		Wisdom:       1,
+		Gender:       form.Gender,
+		Pronoun:      form.Pronoun,
+		HairID:       form.HairID,
+		ColorHair:    "#000000",
+		ColorSkin:    "#000000",
+		ColorBase:    "#000000",
+		ColorTrim:    "#000000",
+		ClassID:      form.ClassID,
+		RaceID:       form.RaceID,
+		BaseClassID:  form.ClassID,
+	}); err != nil {
+		c.Echo().Logger.Error(err)
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	return c.String(http.StatusOK, "&code=0&reason=Character+created+Successfully%21&message=none&action=none")
 }
 
 type flash struct {
