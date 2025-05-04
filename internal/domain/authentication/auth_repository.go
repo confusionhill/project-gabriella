@@ -53,3 +53,8 @@ func (r *Repository) CreateCharacter(ctx context.Context, character *game.Charac
 	_, err := r.db.ExecContext(ctx, "INSERT INTO df_char (userId, name, gender, pronoun, hairId, colorHair, colorSkin, colorBase, colorTrim, classId, baseClassId, raceId, dragonAmulet) VALUES (:userId, :name, :gender, :pronoun, :hairId, :colorHair, :colorSkin, :colorBase, :colorTrim, :classId, :baseClassId, :raceId, :dragonAmulet)", character.UserId, character.Name, character.Gender, character.Pronoun, character.HairId, character.ColorHair, character.ColorSkin, character.ColorBase, character.ColorTrim, character.ClassId, character.BaseClassId, 7, 1)
 	return err
 }
+
+func (r *Repository) DeleteCharacter(ctx context.Context, charID int64) error {
+	_, err := r.db.ExecContext(ctx, "DELETE FROM df_char WHERE id = ? ", charID)
+	return err
+}

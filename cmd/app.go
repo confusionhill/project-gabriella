@@ -87,10 +87,16 @@ func startApp(cfg *config.Config) {
 		e.Logger.Fatal(err)
 		return
 	}
+	gameRouter, err := router.NewGameRouter(cfg, handlers.GameHandler)
+	if err != nil {
+		e.Logger.Fatal(err)
+		return
+	}
 
 	pagesRouter.Setup(e)
 	sessionRouter.Setup(e)
 	authRouter.Setup(e)
-
-	startGui(cfg, e, rsc)
+	gameRouter.Setup(e)
+	//startGui(cfg, e, rsc)
+	startServer(cfg, e)
 }

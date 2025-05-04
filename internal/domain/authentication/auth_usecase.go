@@ -21,6 +21,10 @@ func NewUsecase(cfg *config.Config, repo *Repository) (*Usecase, error) {
 	}, nil
 }
 
+func (u *Usecase) DeleteCharacterUsecase(ctx context.Context, charID int64) error {
+	return u.repository.DeleteCharacter(ctx, charID)
+}
+
 func (u *Usecase) RegisterUserUsecase(ctx context.Context, user *game.User) error {
 	user.SessionToken = u.generateRandomSessionToken()
 	return u.repository.CreateUser(ctx, user)

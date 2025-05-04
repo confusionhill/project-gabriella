@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"time"
 
-	utils "com.github/confusionhill/df/private/server/internal/Utils"
 	"com.github/confusionhill/df/private/server/internal/config"
 	errorDto "com.github/confusionhill/df/private/server/internal/data/dto/error"
 	gameDto "com.github/confusionhill/df/private/server/internal/data/dto/game"
 	"com.github/confusionhill/df/private/server/internal/data/dto/ninja"
 	"com.github/confusionhill/df/private/server/internal/data/entity/game"
+	"com.github/confusionhill/df/private/server/internal/utilities/fable"
 	"github.com/labstack/echo/v4"
 )
 
@@ -19,11 +19,35 @@ type Handler struct {
 	usecase *Usecase
 }
 
+type flash struct {
+	Password string `xml:"strPassword"`
+	Username string `xml:"strUsername"`
+	Token    string `xml:"strToken"`
+	CharID   int64  `xml:"intCharID"`
+}
+
 func NewHandler(cfg *config.Config, usecase *Usecase) (*Handler, error) {
 	return &Handler{
 		cfg:     cfg,
 		usecase: usecase,
 	}, nil
+}
+
+func (h *Handler) DeleteAccountCharacterHandler(c echo.Context) error {
+	var payload ninja.NinjaDTO
+	if err := xml.NewDecoder(c.Request().Body).Decode(&payload); err != nil {
+		return c.String(http.StatusBadRequest, "Invalid XML")
+	}
+	decryptedContent, err := fable.DecryptNinja(&h.cfg.Server.DragonFable, payload.Content)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	var f flash
+	if err = xml.Unmarshal([]byte(decryptedContent), &f); err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	h.usecase.DeleteCharacterUsecase(c.Request().Context(), f.CharID)
+	return c.String(http.StatusOK, "Character deleted successfully")
 }
 
 func (h *Handler) RegisterAccountCharacterHandler(c echo.Context) error {
@@ -62,17 +86,12 @@ func (h *Handler) RegisterAccountCharacterHandler(c echo.Context) error {
 	return c.String(http.StatusOK, "&code=0&reason=Character+created+Successfully%21&message=none&action=none")
 }
 
-type flash struct {
-	Password string `xml:"strPassword"`
-	Username string `xml:"strUsername"`
-}
-
 func (h *Handler) AuthenticateAccountHandler(c echo.Context) error {
 	var payload ninja.NinjaDTO
 	if err := xml.NewDecoder(c.Request().Body).Decode(&payload); err != nil {
 		return c.String(http.StatusBadRequest, "Invalid XML")
 	}
-	decryptedContent, err := utils.DecryptNinja(&h.cfg.Server.DragonFable, payload.Content)
+	decryptedContent, err := fable.DecryptNinja(&h.cfg.Server.DragonFable, payload.Content)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}

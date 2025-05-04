@@ -23,4 +23,5 @@ func (r *AuthRouter) Setup(e *echo.Echo) {
 	serverGroup.POST("/cf-usersignup.asp", r.handler.RegisterAccountHandler)
 	serverGroup.POST("/cf-userlogin.asp", r.handler.AuthenticateAccountHandler)
 	serverGroup.POST("/cf-characternew.asp", r.handler.RegisterAccountCharacterHandler)
+	serverGroup.POST("/cf-characterdelete.asp", r.handler.DeleteAccountCharacterHandler)
 }

@@ -4,6 +4,8 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 	"time"
 
 	"com.github/confusionhill/df/private/server/internal/config"
@@ -22,6 +24,11 @@ func startServer(cfg *config.Config, e *echo.Echo) {
 			e.Logger.Fatal("shutting down the server:", err)
 		}
 	}()
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+	log.Println("Shutting down server...")
+	killServer(cfg, e)
 }
 
 func killServer(cfg *config.Config, e *echo.Echo) {

@@ -4,9 +4,9 @@ import (
 	"encoding/xml"
 	"time"
 
-	utils "com.github/confusionhill/df/private/server/internal/Utils"
 	"com.github/confusionhill/df/private/server/internal/config"
 	"com.github/confusionhill/df/private/server/internal/data/entity/game"
+	"com.github/confusionhill/df/private/server/internal/utilities/fable"
 )
 
 type CreateCharacterRequestDTO struct {
@@ -109,5 +109,5 @@ func (u *AuthUserDTO) ToString(cfg *config.Config) (string, error) {
 		return "", err
 	}
 	toEncrypt := string(xmlBytes)
-	return utils.EncryptNinja(&cfg.Server.DragonFable, toEncrypt), nil
+	return fable.EncryptNinja(&cfg.Server.DragonFable, toEncrypt), nil
 }
