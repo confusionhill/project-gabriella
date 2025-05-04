@@ -29,11 +29,11 @@ func (r *Repository) CreateUser(ctx context.Context, user *game.User) error {
 func (r *Repository) GetUserByUsername(ctx context.Context, username string) ([]game.User, error) {
 	var users []game.User
 	query := `SELECT
-	 u.id as user_id, u.password, u.email,
-	  u.birth_date, u.session_token, 
-	  c.id as id, c.name, c.level, c.dragon_amulet, c.base_class_id, c.class_id, c.race_id
-	FROM users as u LEFT JOIN characters
-	 as c ON u.id = c.user_id WHERE u.username = ?`
+	 u.id as id, u.password, u.email,
+	  u.birthdate, u.sessionToken, 
+	  c.id as charId, c.name as charName, c.level as charLevel, c.dragonAmulet as charDragonAmulet, c.baseClassId as charBaseClassId, c.classId as charClassId, c.raceId as charRaceId
+	FROM df_user as u LEFT JOIN df_char
+	 as c ON u.id = c.userId WHERE u.username = ?`
 	err := r.db.SelectContext(ctx, &users, query, username)
 	return users, err
 }

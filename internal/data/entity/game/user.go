@@ -23,5 +23,14 @@ type User struct {
 	RecoveryCode    string       `db:"recoveryCode"`
 	RecoveryExpires sql.NullTime `db:"recoveryExpires"`
 	IsDeleted       int64        `db:"_isDeleted"`
-	Character
+
+	CharId           sql.NullInt64  `db:"charId"`
+	CharName         sql.NullString `db:"charName"`
+	CharLevel        sql.NullInt64  `db:"charLevel"`
+	CharDragonAmulet sql.NullInt64  `db:"charDragonAmulet"`
+	CharBaseClassId  sql.NullInt64  `db:"charBaseClassId"`
+	CharClassId      sql.NullInt64  `db:"charClassId"`
+	CharClassName    sql.NullString `db:"charClassName"`
+	CharRaceId       sql.NullInt64  `db:"charRaceId"`
+	CharRaceName     sql.NullString `db:"charRaceName"`
 }

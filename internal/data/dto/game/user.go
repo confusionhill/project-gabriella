@@ -2,7 +2,6 @@ package game
 
 import (
 	"encoding/xml"
-	"fmt"
 	"time"
 
 	utils "com.github/confusionhill/df/private/server/internal/Utils"
@@ -66,21 +65,22 @@ func NewAuthUserDTO(users []game.User) *AuthUserDTO {
 	user := users[0]
 	characters := []CharacterDTO{}
 	for _, character := range users {
-		fmt.Println(character)
-		char := CharacterDTO{
-			CharID:      character.ID,
-			Name:        character.Name,
-			Level:       character.Level,
-			AccessLevel: 1,
-			BaseClassID: character.BaseClassId,
-			ClassName:   "warior",
-			RaceName:    "human",
+		if character.CharId.Valid {
+			char := CharacterDTO{
+				CharID:      character.CharId.Int64,
+				Name:        character.CharName.String,
+				Level:       character.CharLevel.Int64,
+				AccessLevel: 1,
+				BaseClassID: character.CharBaseClassId.Int64,
+				ClassName:   character.CharClassName.String,
+				RaceName:    character.CharRaceName.String,
+			}
+			char.DragonAmulet = character.CharDragonAmulet.Int64
+			characters = append(characters, char)
 		}
-		char.DragonAmulet = character.DragonAmulet
-		characters = append(characters, char)
 	}
 	userdto := UserDTO{
-		UserID:         user.UserId,
+		UserID:         user.ID,
 		CharsAllowed:   6,
 		AccessLevel:    1,
 		Upgrade:        6,
