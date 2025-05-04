@@ -92,5 +92,5 @@ func startApp(cfg *config.Config) {
 	sessionRouter.Setup(e)
 	authRouter.Setup(e)
 
-	startGui(cfg, e)
+	startGui(cfg, e, rsc)
 }

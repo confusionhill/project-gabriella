@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 
+	"com.github/confusionhill/df/private/server/application"
 	"com.github/confusionhill/df/private/server/internal/config"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -15,7 +16,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func startGui(cfg *config.Config, e *echo.Echo) {
+func startGui(cfg *config.Config, e *echo.Echo, rsc *application.Resources) {
 	dfApp := app.New()
 	window := dfApp.NewWindow("Server Control")
 	hello := widget.NewLabel("Project Gabriella, a DragonFable Private Server")
@@ -51,6 +52,11 @@ func startGui(cfg *config.Config, e *echo.Echo) {
 		log.Println("Exiting app...")
 		os.Exit(0)
 	}
+
+	setupBtn.OnTapped = func() {
+		application.Setup(cfg, rsc)
+	}
+
 	content := container.NewVBox(image, hello, startKillBtn, setupBtn, exitBtn, scrollLogs)
 	window.SetContent(content)
 	logs.SetText(fmt.Sprintf("%s\n%s", logs.Text, "message"))

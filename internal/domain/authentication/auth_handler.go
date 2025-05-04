@@ -3,6 +3,7 @@ package authentication
 import (
 	"encoding/xml"
 	"net/http"
+	"time"
 
 	utils "com.github/confusionhill/df/private/server/internal/Utils"
 	"com.github/confusionhill/df/private/server/internal/config"
@@ -33,7 +34,7 @@ func (h *Handler) RegisterAccountCharacterHandler(c echo.Context) error {
 		})
 	}
 	if err := h.usecase.RegisterCharacterUsecase(c.Request().Context(), &game.Character{
-		UserID:       form.UserID,
+		UserId:       form.UserID,
 		Name:         form.CharacterName,
 		Level:        1,
 		Experience:   0,
@@ -46,14 +47,14 @@ func (h *Handler) RegisterAccountCharacterHandler(c echo.Context) error {
 		Wisdom:       1,
 		Gender:       form.Gender,
 		Pronoun:      form.Pronoun,
-		HairID:       form.HairID,
+		HairId:       form.HairID,
 		ColorHair:    "#000000",
 		ColorSkin:    "#000000",
 		ColorBase:    "#000000",
 		ColorTrim:    "#000000",
-		ClassID:      form.ClassID,
-		RaceID:       form.RaceID,
-		BaseClassID:  form.ClassID,
+		ClassId:      form.ClassID,
+		RaceId:       form.RaceID,
+		BaseClassId:  form.ClassID,
 	}); err != nil {
 		c.Echo().Logger.Error(err)
 		return c.String(http.StatusInternalServerError, err.Error())
@@ -117,11 +118,15 @@ func (h *Handler) RegisterAccountHandler(c echo.Context) error {
 	resp := errorDto.ErrorResponseDTO{
 		Code: errorDto.INVALID_EMAIL,
 	}
-	err := h.usecase.RegisterUserUsecase(c.Request().Context(), &game.User{
+	bday, err := time.Parse("1/2/2006", strDOB)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	err = h.usecase.RegisterUserUsecase(c.Request().Context(), &game.User{
 		Username:  strUserName,
 		Password:  strPassword,
 		Email:     strEmail,
-		BirthDate: strDOB,
+		Birthdate: bday,
 	})
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())

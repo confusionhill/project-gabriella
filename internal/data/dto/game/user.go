@@ -68,21 +68,19 @@ func NewAuthUserDTO(users []game.User) *AuthUserDTO {
 	for _, character := range users {
 		fmt.Println(character)
 		char := CharacterDTO{
-			CharID:      character.Id,
+			CharID:      character.ID,
 			Name:        character.Name,
 			Level:       character.Level,
 			AccessLevel: 1,
-			BaseClassID: character.BaseClassID,
+			BaseClassID: character.BaseClassId,
 			ClassName:   "warior",
 			RaceName:    "human",
 		}
-		if character.DragonAmulet {
-			char.DragonAmulet = 1
-		}
+		char.DragonAmulet = character.DragonAmulet
 		characters = append(characters, char)
 	}
 	userdto := UserDTO{
-		UserID:         user.UserID,
+		UserID:         user.UserId,
 		CharsAllowed:   6,
 		AccessLevel:    1,
 		Upgrade:        6,
@@ -96,7 +94,7 @@ func NewAuthUserDTO(users []game.User) *AuthUserDTO {
 		Characters:     characters,
 	}
 
-	if user.IsEmailActivated {
+	if user.Activated {
 		userdto.ActivationFlag = 1
 	}
 

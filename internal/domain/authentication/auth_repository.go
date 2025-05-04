@@ -22,7 +22,7 @@ func NewRepository(cfg *config.Config, db *sqlx.DB) (*Repository, error) {
 }
 
 func (r *Repository) CreateUser(ctx context.Context, user *game.User) error {
-	_, err := r.db.ExecContext(ctx, "INSERT INTO users (username, password, email, birth_date, session_token) VALUES (:username, :password, :email, :birth_date, :session_token)", user.Username, user.Password, user.Email, user.BirthDate, user.SessionToken)
+	_, err := r.db.ExecContext(ctx, "INSERT INTO df_user (username, password, email, birthdate, sessionToken) VALUES (:username, :password, :email, :birth_date, :session_token)", user.Username, user.Password, user.Email, user.Birthdate, user.SessionToken)
 	return err
 }
 
@@ -41,7 +41,7 @@ func (r *Repository) GetUserByUsername(ctx context.Context, username string) ([]
 func (r *Repository) CreateCharacter(ctx context.Context, character *game.Character) error {
 	_, err := r.db.ExecContext(ctx,
 		"INSERT INTO characters (user_id, name, level, experience, strength, dexterity, intelligence, luck, charisma, endurance, wisdom, race_id, class_id, base_class_id, created_at, gender, pronoun, hair_id, color_hair, color_skin, color_base, color_trim) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-		character.UserID,
+		character.UserId,
 		character.Name,
 		character.Level,
 		character.Experience,
@@ -52,18 +52,18 @@ func (r *Repository) CreateCharacter(ctx context.Context, character *game.Charac
 		character.Charisma,
 		character.Endurance,
 		character.Wisdom,
-		character.RaceID,
-		character.ClassID,
-		character.BaseClassID,
+		character.RaceId,
+		character.ClassId,
+		character.BaseClassId,
 		time.Now(),
 		character.Gender,
 		character.Pronoun,
-		character.HairID,
+		character.HairId,
 		character.ColorHair,
 		character.ColorSkin,
 		character.ColorBase,
 		character.ColorTrim,
-		character.QuestID,
+		character.QuestId,
 	)
 	return err
 }
