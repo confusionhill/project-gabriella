@@ -28,13 +28,25 @@ func (r *Repository) CreateUser(ctx context.Context, user *game.User) error {
 
 func (r *Repository) GetUserByUsername(ctx context.Context, username string) ([]game.User, error) {
 	var users []game.User
+	tx, err := r.db.Beginx()
+	if err != nil {
+		return nil, err
+	}
+	tx.Commit()
+	defer tx.Rollback()
 	query := `SELECT
-	 u.id as id, u.password, u.email,
-	  u.birthdate, u.sessionToken, 
-	  c.id as charId, c.name as charName, c.level as charLevel, c.dragonAmulet as charDragonAmulet, c.baseClassId as charBaseClassId, c.classId as charClassId, c.raceId as charRaceId
-	FROM df_user as u LEFT JOIN df_char
-	 as c ON u.id = c.userId WHERE u.username = ?`
-	err := r.db.SelectContext(ctx, &users, query, username)
+	u.id as id, u.password, u.email,
+	u.birthdate, u.sessionToken, 
+	c.id as charId, c.name as charName, c.level as charLevel, 
+	c.dragonAmulet as charDragonAmulet, c.baseClassId as charBaseClassId, 
+	c.classId as charClassId, c.raceId as charRaceId,
+	cl.name as charClassName, r.name as charRaceName
+FROM df_user as u 
+LEFT JOIN df_char as c ON u.id = c.userId
+LEFT JOIN df_class as cl ON c.classId = cl.id
+LEFT JOIN df_race as r ON c.raceId = r.id
+WHERE u.username = ?`
+	err = r.db.SelectContext(ctx, &users, query, username)
 	return users, err
 }
 
