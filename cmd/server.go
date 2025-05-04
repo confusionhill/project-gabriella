@@ -18,6 +18,7 @@ func startServer(cfg *config.Config, e *echo.Echo) {
 	go func() {
 		serverRunning = true
 		if err := e.Start(cfg.Server.Port); err != nil && err != http.ErrServerClosed {
+			// logger.LoggerInstance.Fatal(fmt.Sprintf("shutting down the server: %s", err))
 			e.Logger.Fatal("shutting down the server:", err)
 		}
 	}()
@@ -29,6 +30,7 @@ func killServer(cfg *config.Config, e *echo.Echo) {
 	if err := e.Shutdown(ctx); err != nil {
 		e.Logger.Fatal(err)
 	}
+	// logger.LoggerInstance.Info("Shutting down server...")
 	log.Println("Shutting down server...")
 	serverRunning = false
 }

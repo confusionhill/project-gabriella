@@ -54,6 +54,7 @@ func startGui(cfg *config.Config, e *echo.Echo) {
 	content := container.NewVBox(image, hello, startKillBtn, setupBtn, exitBtn, scrollLogs)
 	window.SetContent(content)
 	logs.SetText(fmt.Sprintf("%s\n%s", logs.Text, "message"))
+	// logger.CreateLogger(logs)
 	window.ShowAndRun()
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
